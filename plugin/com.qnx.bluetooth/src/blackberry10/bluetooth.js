@@ -164,13 +164,13 @@ function onStatusPPSChange(event) {
 function onServicesPPSChange() {
 
 	var devices = {};
-	if(_servicesPPS && _servicesPPS.data && _servicesPPS.data.services) {
-		devices[SERVICE_HFP] = _servicesPPS.data.services['hfp'];
-		devices[SERVICE_SPP] = _servicesPPS.data.services['spp'];
-		devices[SERVICE_PBAP] = _servicesPPS.data.services['pbap'];
-		devices[SERVICE_MAP] = _servicesPPS.data.services['map'];
-		devices[SERVICE_PAN] = _servicesPPS.data.services['pan'];
-		devices[SERVICE_AVRCP] = _servicesPPS.data.services['avrcp'];
+	if(_servicesPPS && _servicesPPS.ppsObj) {
+		devices[SERVICE_HFP] = _servicesPPS.ppsObj['hfp'];
+		devices[SERVICE_SPP] = _servicesPPS.ppsObj['spp'];
+		devices[SERVICE_PBAP] = _servicesPPS.ppsObj['pbap'];
+		devices[SERVICE_MAP] = _servicesPPS.ppsObj['map'];
+		devices[SERVICE_PAN] = _servicesPPS.ppsObj['pan'];
+		devices[SERVICE_AVRCP] = _servicesPPS.ppsObj['avrcp'];
 	}
 	//_serviceStateChanged(devices);
 }
@@ -290,24 +290,24 @@ module.exports = {
 	 */
 	getConnectedDevices: function(service) {
 		var devices = {};
-		if(_servicesPPS && _servicesPPS.data && _servicesPPS.data.services) {
+		if(_servicesPPS && _servicesPPS.ppsObj) {
 			if(!service || service == SERVICE_HFP || service == SERVICE_ALL) {
-				devices[SERVICE_HFP] = _servicesPPS.data.services['hfp'];
+				devices[SERVICE_HFP] = _servicesPPS.ppsObj['hfp'];
 			}
 			if(!service || service == SERVICE_SPP || service == SERVICE_ALL) {
-				devices[SERVICE_SPP] = _servicesPPS.data.services['spp'];
+				devices[SERVICE_SPP] = _servicesPPS.ppsObj['spp'];
 			}
 			if(!service || service == SERVICE_PBAP || service == SERVICE_ALL) {
-				devices[SERVICE_PBAP] = _servicesPPS.data.services['pbap'];
+				devices[SERVICE_PBAP] = _servicesPPS.ppsObj['pbap'];
 			}
 			if(!service || service == SERVICE_MAP || service == SERVICE_ALL) {
-				devices[SERVICE_MAP] = _servicesPPS.data.services['map'];
+				devices[SERVICE_MAP] = _servicesPPS.ppsObj['map'];
 			}
 			if(!service || service == SERVICE_PAN || service == SERVICE_ALL) {
-				devices[SERVICE_PAN] = _servicesPPS.data.services['pan'];
+				devices[SERVICE_PAN] = _servicesPPS.ppsObj['pan'];
 			}
 			if(!service || service == SERVICE_AVRCP || service == SERVICE_ALL) {
-				devices[SERVICE_AVRCP] = _servicesPPS.data.services['avrcp'];
+				devices[SERVICE_AVRCP] = _servicesPPS.ppsObj['avrcp'];
 			}
 		}
 		return devices;
