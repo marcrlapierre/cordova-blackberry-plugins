@@ -105,6 +105,7 @@ module.exports = {
 	/**	
 	 * @description Initialize the browser plugin.
 	 * @param {String} chromeUrl The URL of the WebView that handles all the user interface and application logic.
+	 * @param {Number} uiWidth The width you want your chrome WebView to be.
 	 * @param {Number} uiHeight The height you want your WebView to be when the overlay is hidden.
 	 * @param {Number} overlayHeight The height you want for your WebView to be when the overlay is visible.
 	 * @memberOf module:qnx.browser
@@ -115,9 +116,9 @@ module.exports = {
 	 *		uiHeight = 50,
 	 *		overlayHeight = 50;
 	 *
-	 * car.browser.init(chromeUrl, uiHeight, overlayHeight);
+	 * car.browser.init(chromeUrl, uiWidth, uiHeight, overlayHeight);
 	 */
-	init : function (chromeUrl, uiHeight, overlayHeight) {
+	init : function (chromeUrl, uiWidth, uiHeight, overlayHeight) {
 		var args = {};
 
 		if (chromeUrl && chromeUrl !== undefined && chromeUrl !== '') {
@@ -126,6 +127,12 @@ module.exports = {
 			console.error("Error: qnx.browser.init requires a valid url to be passed in '", chromeUrl, "' is not valid");
 		}
 		
+		if (uiWidth && uiWidth !== undefined) {
+			args.uiWidth = uiWidth;
+		} else {
+			console.error("Error: qnx.browser.init requires a valid uiWidth to be passed in '", uiWidth, "' is not valid");
+		}
+
 		if (uiHeight && uiHeight !== undefined) {
 			args.uiHeight = uiHeight;
 		} else {

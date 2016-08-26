@@ -36,6 +36,7 @@ var _tabList = {},
 	_url =  "http://www.qnx.com",
 	_overlay,
 	_overlayHeight,
+	_chromeWidth,
 	_chromeHeight,
 	_tabTrigger = [],
 	_chromeWebview,
@@ -179,6 +180,15 @@ function onWebviewCreated(webview, args) {
 			});
 		}
 	});
+	webview.addEventListener("DocumentLoadFinished", function (e) {
+		// HACK
+		// We have to force the webview geometry to reset every time the location changes, otherwise the contents
+		// will render to the screen width rather than the specified webview's geometry width.
+		// We also have to shift the height by 1 pixel every time since the contents of the webview won't 
+		// re-render if we set the geometry to whatever the webview already believes it to be.
+		webview.setGeometry(_x, _y, _width, _height + 1);
+		webview.setGeometry(_x, _y, _width, _height);
+	});
 
 	webview.enableDialogRequestedEvents = true;
 
@@ -279,12 +289,13 @@ module.exports = {
 			wv;
 		for (wv in webviews) {
 			if (webviews[wv].url === args.url) {
+				_chromeWidth = args.uiWidth;
 				_chromeHeight = args.uiHeight;
 				_overlayHeight =  _chromeHeight + args.overlayHeight;
 				_chromeWebview = webviews[wv];
 				_chromeWebview.zOrder = _chromeZOrder;
 				_chromeWebview.setBackgroundColor(0x00ffffff);
-				_chromeWebview.setGeometry(0, 0, _width, _chromeHeight);
+				_chromeWebview.setGeometry(0, 0, _chromeWidth, _chromeHeight);
 			} else if (webviews[wv].dialog) {
 				_uiWebview = webviews[wv];
 				updateUiWebview();
@@ -356,7 +367,13 @@ module.exports = {
 			lastActive = _lastActiveTabId;
 			_lastActiveTabId = null;
 			//check to make sure the "last active tab" isn't the one being removed
-			if (lastActive === null || lastActive === tabId) {
+			
+			// We can't restore to the tab we're removing
+			if(lastActive === tabId) {
+				lastActive = null;
+			}
+			
+			if (lastActive === null) {
 				//search for a valid tab to become visible
 				for (tab in _tabList ) {
 					if (parseInt(tab) !== _tabList[tabId].id) {
